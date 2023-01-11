@@ -1,25 +1,42 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { Container, CssBaseline } from "@mui/material";
+import {
+  StyledEngineProvider,
+  ThemeProvider as MuiThemeProvider,
+} from "@mui/material/styles";
+
+import { AnimatePresence } from "framer-motion";
+import { createContext } from "react";
+import { RouterProvider } from "react-router";
+import { router } from "./routes/router";
+import { BackgroundBox } from "./StyledApp";
+import ChangeColorTheme from "./theme/theme";
+import ColorThemeButton from "./ui/ColorThemeButton";
+
+export const ColorModeContext = createContext(() => {});
+//При создании контекста необходимо указывать тип в т.ч. и функцию
 
 function App() {
+  const { theme, colorMode } = ChangeColorTheme();
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <ColorModeContext.Provider value={colorMode.changeColorMode}>
+        <StyledEngineProvider injectFirst>
+          <MuiThemeProvider theme={theme}>
+            <CssBaseline>
+              <BackgroundBox themecolor={theme.palette.mode}>
+                <Container maxWidth={false}>
+                  <AnimatePresence mode="wait">
+                    <RouterProvider router={router} />
+                  </AnimatePresence>
+                </Container>
+                <ColorThemeButton />
+              </BackgroundBox>
+            </CssBaseline>
+          </MuiThemeProvider>
+        </StyledEngineProvider>
+      </ColorModeContext.Provider>
+    </>
   );
 }
 
