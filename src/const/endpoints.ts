@@ -15,6 +15,7 @@ const ENDPOINTS = {
     TASKLIST: "tasklist/",
     TASK: "task/",
     COMMENT: "comment/",
+    CREATETASK: "create/",
   },
 };
 

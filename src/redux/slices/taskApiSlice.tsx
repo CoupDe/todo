@@ -4,6 +4,7 @@ import {
   ITask,
   ITaskComment,
 } from "../../typeinterfaces/types";
+import { TNewTask } from "../../validation/newTaskValidation";
 import { taskApi } from "../api/taskApi";
 import { getTask } from "./viewSlice";
 //Надо разобрать с формированием динамического baseUrl т.к. ApiSlice один но пути разные
@@ -21,7 +22,7 @@ export const taskApiSlice = taskApi.injectEndpoints({
       async onQueryStarted(id, { dispatch, queryFulfilled }) {
         try {
           const { data } = await queryFulfilled;
-          console.log("data", data);
+
           // console.log("data in taskApiSlice", data);
           // `onSuccess` side-effect
 
@@ -56,11 +57,26 @@ export const taskApiSlice = taskApi.injectEndpoints({
       },
       invalidatesTags: ["Comment"],
     }),
+
+    addTask: build.mutation<{ newTask: TNewTask }, TNewTask>({
+      query(data: TNewTask) {
+        console.log("query in rtQ", data);
+        return {
+          url: `${baseAPIURL(ENDPOINTS.TODO.TASKLIST) + "create/"}`,
+          method: "POST",
+          body: data,
+        };
+      },
+
+      invalidatesTags: ["NewTask"],
+    }),
   }),
 });
+
 export const {
   useFetchTaskListQuery,
   useFetchTaskQuery,
   usePrefetch,
   useAddCommentMutation,
+  useAddTaskMutation,
 } = taskApiSlice;

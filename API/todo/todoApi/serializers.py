@@ -30,7 +30,8 @@ class CommentListSerializers(serializers.ModelSerializer):
 
 class TaskListSerializers(serializers.ModelSerializer):
     # Вывод задачи с комментариями
-    creator = serializers.CharField(source='creator.first_name')
+    creator = serializers.CharField(
+        source='creator.first_name', read_only=True)
     # comments = CommentListSerializers(many=True)
 
     created_at = serializers.DateTimeField(
@@ -40,12 +41,14 @@ class TaskListSerializers(serializers.ModelSerializer):
         model = Task
         fields = ['short_description', 'id',
                   'importance_task', 'updated_at', 'created_at', 'isComplete', 'creator']
+
+
 # Задача с комментариями
 
 
 class TaskSerializers(serializers.ModelSerializer):
     # Вывод задачи с комментариями
-    creator = serializers.CharField(source='creator.first_name')
+    task_creator = serializers.CharField(source='task_creator.first_name')
     # comments = CommentListSerializers(many=True)
     comments = serializers.SerializerMethodField()
 
@@ -55,11 +58,27 @@ class TaskSerializers(serializers.ModelSerializer):
     class Meta:
         model = Task
         fields = ['short_description', 'id',
-                  'importance_task', 'updated_at', 'created_at', 'isComplete', 'creator',  'comments']
+                  'importance_task', 'updated_at', 'created_at', 'isComplete', 'task_creator',  'comments']
 
     def get_comments(self, instance):
         comments = instance.comments.order_by('-created_at')
         return CommentListSerializers(comments, many=True).data
+
+# Create Task
+
+
+class TaskCreateSerializers(serializers.ModelSerializer):
+
+    # task_creator = serializers.CharField(read_only=True)
+    # departament = serializers.CharField(read_only=True)
+
+    class Meta:
+        model = Task
+        fields = ['short_description',
+                  'task_creator', 'departament', 'short_description',
+                  'description',
+                  'importance_task']
+
 
 # Create Comment
 
@@ -78,11 +97,3 @@ class CommentSerializers(serializers.ModelSerializer):
         validated_data['comment_creator'] = self.context['user_instance']
         validated_data['comment_task'] = self.context['task_instance']
         return TaskComment.objects.create(**validated_data)
-
-    # def create(self, validated_data):
-    #     print('validated_data', validated_data)
-    #     user = TodoUser.objects.get(pk=validated_data['comment_creator'])
-    #     validated_data['comment_creator'] = user
-    #     task = Task.objects.get(pk=validated_data['comment_task'])
-    #     validated_data['comment_task'] = task
-    #     return TaskComment.objects.create(**validated_data)

@@ -6,9 +6,10 @@ export const newTaskSchema = object({
     .trim()
     .required("Поле является обязательным для заполнения")
     .max(100, "Не более 100 символов"),
-  creator: string().required(),
+  task_creator: string().required(),
   description: string().required("Поле является обязательным для заполнения"),
   importance_task: string().required(),
+  departament: string().required(),
 });
 
 export type TNewTask = InferType<typeof newTaskSchema>;

@@ -6,7 +6,7 @@ from rest_framework.response import Response
 
 from authentication.models import TodoUser
 from .models import Task, TaskComment
-from .serializers import CommentListSerializers, CommentSerializers, TaskListSerializers, TaskSerializers
+from .serializers import CommentListSerializers, CommentSerializers, TaskCreateSerializers, TaskListSerializers, TaskSerializers
 from rest_framework import status
 
 
@@ -15,6 +15,23 @@ class TaskList(generics.ListCreateAPIView):
     permission_classes = (AllowAny,)
     queryset = Task.objects.all()
     serializer_class = TaskListSerializers
+
+
+class TaskCreate(generics.CreateAPIView):
+    permission_classes = (AllowAny,)
+    serializer_class = TaskCreateSerializers
+
+    def perform_create(self, serializer):
+        print(self.request.data)
+        # self.request.data['task_creator'] = TodoUser.objects.get(
+            # pk=self.request.data['task_creator'])
+
+        serializer = TaskCreateSerializers(data=self.request.data)
+
+        print(serializer)
+        # print(serializer.is_valid())
+        serializer.is_valid()
+        serializer.save()
 
 
 class TaskRetriveUpdate(generics.RetrieveUpdateAPIView):
@@ -35,6 +52,8 @@ class TaskCommentCreate(generics.CreateAPIView):
         serializer.is_valid()
         serializer.save()
 
+
+# class CreateTask(generics.CreateAPIView)
 
 class TaskCommentList(generics.ListAPIView):
     permission_classes = (AllowAny,)

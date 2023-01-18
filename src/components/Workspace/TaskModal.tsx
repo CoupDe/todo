@@ -52,9 +52,7 @@ const TaskModal = () => {
     refetchOnMountOrArgChange: true,
   });
   const navigate = useNavigate();
-  // const task = useAppSelector((state) =>
-  //   state.viewTaskSlice.taskList.find((task) => task.id === +taskId!)
-  // );
+
   const handleShowComments = () => {
     setShowComments(!showComments);
   };
@@ -111,7 +109,7 @@ const TaskModal = () => {
                   sx={{ display: "inline" }}
                   id="scroll-dialog-title"
                 >
-                  {task.creator}
+                  {task.task_creator}
                 </Typography>
               </Box>
             </Box>
@@ -119,35 +117,37 @@ const TaskModal = () => {
               <Typography variant="subtitle2">Описание:</Typography>
 
               <Typography variant="body1">{task.short_description}</Typography>
-              <Divider sx={{ mx: -2 }}>
-                <IconButton
-                  disableRipple
-                  size="small"
-                  onClick={handleShowComments}
-                >
-                  <CommentIcon fontSize="small" />
-                </IconButton>
-              </Divider>
-              {/* Comment Component */}
-
               {task.comments.length > 0 && (
-                <Box
-                  sx={{ mt: 2 }}
-                  component={motion.div}
-                  variants={parentVariant}
-                  initial="show"
-                  animate="visible"
-                >
-                  {showComments &&
-                    task.comments.map((comment, _i) => (
-                      <CommentTask
-                        key={comment.id}
-                        index={_i}
-                        comment={comment}
-                        marginProps={_i % 2 > 0 ? { ml: 2 } : { mr: 2 }}
-                      />
-                    ))}
-                </Box>
+                <>
+                  <Divider sx={{ mx: -2 }}>
+                    <IconButton
+                      disableRipple
+                      size="small"
+                      onClick={handleShowComments}
+                    >
+                      <CommentIcon fontSize="small" />
+                    </IconButton>
+                  </Divider>
+                  {/* Comment Component */}
+
+                  <Box
+                    sx={{ mt: 2 }}
+                    component={motion.div}
+                    variants={parentVariant}
+                    initial="show"
+                    animate="visible"
+                  >
+                    {showComments &&
+                      task.comments.map((comment, _i) => (
+                        <CommentTask
+                          key={comment.id}
+                          index={_i}
+                          comment={comment}
+                          marginProps={_i % 2 > 0 ? { ml: 2 } : { mr: 2 }}
+                        />
+                      ))}
+                  </Box>
+                </>
               )}
             </DialogContent>
             <DialogActions

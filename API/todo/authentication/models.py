@@ -11,9 +11,9 @@ import jwt
 
 
 class Departament(models.TextChoices):
-    DESIGN = 'DESIGN', ('Дизаин')
-    FRONTEND = "FRONT", ('Фронтенд')
-    BACKEND = "BACK", ('Бэкенд')
+    DEVELOPMENT = 'Development', ('Разработка')
+    SERVICES = "Services", ('Сервисы')
+    MANAGEMENT = "Management", ('Менеджмент')
 
 
 class TodoUserManager(BaseUserManager):
@@ -60,7 +60,7 @@ class TodoUser(AbstractBaseUser, PermissionsMixin):
     username = models.CharField(
         db_index=True, max_length=100, unique=True, blank=True)
     departament = models.CharField(
-        max_length=30, choices=Departament.choices, default=Departament.DESIGN, verbose_name='Направление')
+        max_length=30, choices=Departament.choices, default=Departament.DEVELOPMENT, verbose_name='Направление')
     # Так же мы нуждаемся в поле, с помощью которого будем иметь возможность
     # связаться с пользователем и идентифицировать его при входе в систему.
     # Поскольку адрес почты нам нужен в любом случае, мы также будем

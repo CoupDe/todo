@@ -5,7 +5,7 @@ export const taskApi = createApi({
   reducerPath: "taskAuthApi",
   refetchOnFocus: true,
   refetchOnReconnect: true,
-  tagTypes: ["Todo", "Comment"],
+  tagTypes: ["Todo", "Comment", "NewTask"],
   baseQuery: baseQueryWithReauth,
   endpoints: (builder) => ({}),
 });

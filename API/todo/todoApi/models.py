@@ -12,6 +12,12 @@ class Priority(models.TextChoices):
     LOW = "CC", ('Низкий')
 
 
+class Departament(models.TextChoices):
+    DEVELOPMENT = 'Development', ('Разработка')
+    SERVICES = "Services", ('Сервисы')
+    MANAGEMENT = "Management", ('Менеджмент')
+
+
 class BaseModel(models.Model):
     created_at = models.DateTimeField(
         auto_now_add=True, verbose_name='Дата создания')
@@ -28,11 +34,13 @@ class Task(BaseModel):
     description = models.TextField(max_length=3000,
                                    blank=False, verbose_name='Задача', default='Описание')
     # Поле связи с id пользователя
-    creator = models.ForeignKey(
+    task_creator = models.ForeignKey(
         TodoUser, on_delete=models.CASCADE, related_name="task_creator")
     isComplete = models.BooleanField(verbose_name="Выполенено", default=False)
     importance_task = models.CharField(
         max_length=30, choices=Priority.choices, default=Priority.MEDIUM, verbose_name='Важность задачи')
+    departament = models.CharField(
+        max_length=30, choices=Departament.choices, blank=True, verbose_name='Департамент')
 
     def __str__(self):
         return f'%{self.short_description}'

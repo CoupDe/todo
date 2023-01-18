@@ -47,7 +47,7 @@ export interface ITaskComment {
   updated_at: Date;
   created_at: string;
   isComplete: boolean;
-  creator: string;
+  task_creator: string;
   comments: IComment[];
 }
 // export type UserFetchData = IUserToken & IUserInfo;
@@ -61,13 +61,18 @@ export interface IUserAuth {
 }
 
 //***************API TASK TYPES & INTERFACE***************
+export enum Departaments {
+  Development = "Development",
+  Services = "Services",
+  Management = "Management",
+}
 export type PriorityTask = "AA" | "BB" | "CC";
 export interface ITask {
   created_at: string;
   short_description: string;
   id: number;
   importance_task: PriorityTask;
-  creator: string;
+  task_creator: string;
   isComplete: boolean;
   updated_at: string;
   description: string;
